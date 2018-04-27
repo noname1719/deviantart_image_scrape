@@ -1,9 +1,15 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+from urllib.request import urlretrieve
 
 
 def steal_image(links):
-    pass
+    for link in links:
+        html = urlopen(link)
+        soup = BeautifulSoup(html, 'html.parser')
+        img = soup.find('img', 'dev-content-normal')['src']
+        info = soup.find('div', 'dev-title-container ').find('h1').get_text().split(' by ')
+        print(img+'                '+info[0]+'              '+info[1])
 
 
 def collect_links(tag, max_count):
@@ -20,5 +26,5 @@ def collect_links(tag, max_count):
         offset += 24
 
 
-for i in collect_links('mlp', 54):
-    print(i)
+urls = collect_links('nature', 15)
+steal_image(urls)
